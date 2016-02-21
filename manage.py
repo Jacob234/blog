@@ -23,9 +23,5 @@ def seed():
         session.add(entry)
     session.commit()
     
-    
-    
-    
-    
 if __name__ == "__main__":
     manager.run()
