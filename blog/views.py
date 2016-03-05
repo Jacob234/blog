@@ -57,4 +57,11 @@ def single(id):
     )
         
         
+@app.route("/entry/<id>/edit")
+def edit(id):
+    query = session.query(Entry).get(id)
+    if query is None:
+        return redirect(url_for("entries"))
+    return render_template("edit.html",
+        entry = query)
         
