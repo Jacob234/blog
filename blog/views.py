@@ -57,11 +57,9 @@ def edit_get(id):
         
 @app.route("/entry/<id>/edit", methods=["POST"])
 def edit_post(id):
-    entry = Entry(
-        title=request.form["title"],
-        content=request.form["content"],
-    )
-    session.add(entry)
+    entry = session.query(Entry).get(id)
+    entry.title=request.form["title"]
+    entry.content=request.form["content"]
     session.commit()
     return redirect(url_for("entries"))
     
@@ -74,19 +72,17 @@ def single(id):
         entries=[query]
     )
         
-"""        
-@app.route("/entry/<id>/edit")
-def edit(id):
-    query = session.query(Entry).get(id)
-    if query is None:
-        return redirect(url_for("entries"))
-    return render_template("edit.html",
-        entry = query)
-"""
-        
-@app.route("/entry/<id>/delete")
-def delete(id):
-    deleted = session.delete(id)
+
+@app.route("/entry/<id>/delete", methods = ["GET"])
+def delete_get(id):
+    deleted = session.query(Entry).get(id)
     if deleted is None:
         return redirect(url_for("entries"))
-    return render_template
+    return render_template("delete.html", entry = deleted)
+    
+@app.route("/entry/<id>/delete", methods = ["POST"])
+def delete_post(id):
+    deleted = session.query(Entry).get(id)
+    session.delete(deleted)
+    session.commit()
+    return redirect(url_for("entries"))
